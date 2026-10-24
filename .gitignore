@@ -1,0 +1,8 @@
+# 运行期产物
+output/
+dist/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+Thumbs.db

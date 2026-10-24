@@ -1,0 +1,9 @@
+# 易学姓名学解析 —— 构建期依赖（仅维护数据资产时需要）
+#
+# 普通使用者无需安装本文件中的任何包。
+# 仅在以下情形需要：
+#   - 改了笔画库后要重建读音库： python scripts/build_pinyin.py
+#
+# 安装： pip install -r requirements-build.txt
+
+pypinyin>=0.49.0

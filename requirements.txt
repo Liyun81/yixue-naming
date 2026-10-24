@@ -1,0 +1,14 @@
+# 易学姓名学解析 —— 运行时依赖
+#
+# 本文件有意留空：技能运行时只使用 Python 标准库（json / os / sys /
+# argparse / datetime / unicodedata / re / dataclasses / typing），
+# 不需要安装任何第三方包。
+#
+# 所有需要外部库的工作都已在「构建期」完成，产物是 assets/*.json：
+#   - pypinyin 用于生成 assets/pinyin.json（读音/声母/韵母/声调）
+#   - 构建后运行时不再 import pypinyin
+#
+# 因此 `pip install -r requirements.txt` 是安全的空操作。
+# 若需重建数据资产，请安装 requirements-build.txt。
+#
+# 要求：Python >= 3.9（仅使用标准库）

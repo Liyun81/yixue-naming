@@ -1,0 +1,402 @@
+{
+  "name": "易学姓名学解析",
+  "slug": "yixue-naming",
+  "version": "1.7.2",
+  "release_date": "2026-10-24",
+  "description": "宝宝起名、公司取名、姓名测试打分——基于周易易理与传统姓名学，提供姓名字义解析、天地人外总五格的格局梳理、宫商角徵羽五音与平仄、64卦五行旺衰，并可依出生时间与出生地排真太阳时八字原盘（四柱、藏干十神、日主强弱、五行喜忌），再将五格、五音、梅花、八字四个体系投影到五行／刚柔／时段／数象四条共用坐标轴上做跨体系统合，按三层权重加权并给出交叉印证（印证／张力／调和）与三段走势图，支持公司/团队起名与改名候选比较；明确定位为国学文化娱乐参考，仅供审美与文化参考，不具备科学预测效力，不构成命运决断。",
+  "disclaimer": "本结果基于周易易理与传统姓名学理论生成，仅供审美与文化参考，不具备科学预测效力；不构成命运决断，亦不可作为人生、健康、婚姻、投资等任何实际决策依据。",
+  "tags": [
+    "易学",
+    "姓名学",
+    "起名",
+    "测名",
+    "宝宝起名",
+    "小孩取名",
+    "新生儿起名",
+    "取名",
+    "名字打分",
+    "公司起名",
+    "团队命名",
+    "品牌命名",
+    "商号取名",
+    "生辰八字",
+    "八字取名",
+    "五行缺什么",
+    "易经取名",
+    "周易起名",
+    "传统文化"
+  ],
+  "positioning": "国学文化娱乐参考，不构成命运决断；不可用于健康、婚姻、投资、择业等实际决策。",
+  "runtime": {
+    "language": "python",
+    "python": ">=3.9",
+    "stdlib_only": true,
+    "dependencies": [],
+    "build_dependencies": [
+      "pypinyin>=0.49.0"
+    ],
+    "notes": "所有外部库工作已前置到构建期，产物为 assets/pinyin.json；运行时 import 清单中无任何第三方包。"
+  },
+  "entry": {
+    "skill_doc": "SKILL.md",
+    "cli": "scripts/cli.py",
+    "invoke": "python scripts/cli.py <command> [options]",
+    "commands": [
+      {
+        "name": "analyze",
+        "summary": "姓名解析 / 起名候选筛选 / 机构名",
+        "delegate": "scripts/analyze.py",
+        "examples": [
+          "python scripts/cli.py analyze --surname 李 --given 明华 --gender male",
+          "python scripts/cli.py analyze --full 欧阳明华",
+          "python scripts/cli.py analyze --surname 王 --candidates \"浩然,宇轩,子睿\"",
+          "python scripts/cli.py analyze --org \"同和堂\"",
+          "python scripts/cli.py analyze --full 刘宇鹏 --png",
+          "python scripts/cli.py analyze --surname 李 --given 明华 --json"
+        ]
+      },
+      {
+        "name": "stroke",
+        "summary": "康熙笔画查询 / 生僻字增补 / 覆盖率统计",
+        "delegate": "scripts/stroke_query.py",
+        "examples": [
+          "python scripts/cli.py stroke 李明华",
+          "python scripts/cli.py stroke add 懿 22",
+          "python scripts/cli.py stroke stats"
+        ]
+      },
+      {
+        "name": "selfcheck",
+        "summary": "安装自检：资产完整性 + 关键算例 + 文档一致性（别名 doctor）",
+        "delegate": "scripts/cli.py",
+        "examples": [
+          "python scripts/cli.py selfcheck"
+        ]
+      },
+      {
+        "name": "test",
+        "summary": "运行全部回归测试",
+        "delegate": "scripts/tests.py",
+        "examples": [
+          "python scripts/cli.py test"
+        ]
+      },
+      {
+        "name": "info",
+        "summary": "版本、解释器与数据资产概况",
+        "delegate": "scripts/cli.py",
+        "examples": [
+          "python scripts/cli.py info"
+        ]
+      },
+      {
+        "name": "--version",
+        "summary": "输出版本号",
+        "delegate": "scripts/cli.py",
+        "examples": [
+          "python scripts/cli.py --version"
+        ]
+      }
+    ],
+    "outputs": {
+      "text": "stdout 七段式报告，各维度结论后附 图│ 路径",
+      "cards_dir": "output/<姓名>/",
+      "cards": [
+        "00_合览.html",
+        "01_五格.svg",
+        "02_五音.svg",
+        "03_梅花.svg",
+        "04_八字.svg",
+        "05_统合.svg",
+        "05a_统合速览.svg",
+        "05b_五行平衡.svg",
+        "05c_交叉印证.svg"
+      ],
+      "cards_png": "同目录同名 .png（--png 时，需本机 Edge/Chrome）",
+      "note": "output/ 为运行期目录，不入分发包；删除无副作用。"
+    }
+  },
+  "data_assets": [
+    {
+      "path": "assets/kangxi_strokes.json",
+      "entries": 2737,
+      "unit": "字",
+      "role": "康熙繁体笔画 + 部首折算规则 + 姓氏校准（五格/数理/三才用）"
+    },
+    {
+      "path": "assets/simplified_strokes.json",
+      "entries": 2736,
+      "unit": "字",
+      "role": "现代简体规范笔画（梅花易数起卦专用，含繁→简映射 644 对；Unihan kTotalStrokes）"
+    },
+    {
+      "path": "assets/pinyin.json",
+      "entries": 2737,
+      "unit": "字",
+      "role": "拼音/声母/韵母/声调/平仄/五音 + 姓氏异读"
+    },
+    {
+      "path": "assets/char_meaning.json",
+      "entries": 2737,
+      "unit": "字",
+      "role": "统一 schema 字义库（char/pinyin/pos/yi/example/xiang/wuxing/yong/level）；full 1561 + basic 1175；覆盖四库并集 2737 字，零缺失"
+    },
+    {
+      "path": "assets/eighty_one_numbers.json",
+      "entries": 81,
+      "unit": "条",
+      "role": "数理吉凶、象名、基业、家庭、健康、诗诀"
+    },
+    {
+      "path": "assets/sancai_config.json",
+      "entries": 125,
+      "unit": "条",
+      "role": "三才五行组合的成功运/基础运/评分"
+    },
+    {
+      "path": "assets/sancai_overrides.json",
+      "entries": null,
+      "unit": "条",
+      "role": "三才人工校准覆盖表（生成器输入）"
+    },
+    {
+      "path": "assets/gua64.json",
+      "entries": 64,
+      "unit": "卦",
+      "role": "卦序、上下卦、八宫五行、大象辞、简义"
+    }
+  ],
+  "modules": [
+    {
+      "path": "scripts/wuge.py",
+      "role": "五格计算、数理、三才、评分、六维解读"
+    },
+    {
+      "path": "scripts/wuyin.py",
+      "role": "五音归属、平仄、音律评分"
+    },
+    {
+      "path": "scripts/meihua.py",
+      "role": "梅花易数起卦（现代简体笔画口径）、体用、卦局五行旺衰"
+    },
+    {
+      "path": "scripts/analyze.py",
+      "role": "报告渲染与 JSON 输出（各段末尾附免责声明）"
+    },
+    {
+      "path": "scripts/stroke_query.py",
+      "role": "笔画查询接口与增补"
+    },
+    {
+      "path": "scripts/bazi.py",
+      "role": "八字排盘（真太阳时）与五行喜忌分析"
+    },
+    {
+      "path": "scripts/synthesis.py",
+      "role": "跨体系统合（四轴投影／三层权重／互证加权／交叉印证／统合图）"
+    },
+    {
+      "path": "scripts/dimension_card.py",
+      "role": "维度解读图与统合图（水墨·太极·八卦 SVG 生成器）"
+    },
+    {
+      "path": "scripts/doc_check.py",
+      "role": "文档一致性门禁（版本四方一致／references 索引对齐／FAQ 格式校验／产物清单与用例数）"
+    }
+  ],
+  "data_builders": [
+    {
+      "path": "scripts/build_strokes.py",
+      "needs": [],
+      "outputs": "kangxi_strokes.json"
+    },
+    {
+      "path": "scripts/build_simplified.py",
+      "needs": [
+        "Unihan 数据（构建期联网或本地 zip/txt）"
+      ],
+      "outputs": "simplified_strokes.json"
+    },
+    {
+      "path": "scripts/build_pinyin.py",
+      "needs": [
+        "pypinyin"
+      ],
+      "outputs": "pinyin.json"
+    },
+    {
+      "path": "scripts/build_meaning.py",
+      "needs": [],
+      "outputs": "char_meaning.json"
+    },
+    {
+      "path": "scripts/build_gua64.py",
+      "needs": [],
+      "outputs": "gua64.json"
+    },
+    {
+      "path": "scripts/gen_sancai.py",
+      "needs": [],
+      "outputs": "sancai_config.json"
+    },
+    {
+      "path": "scripts/build_meaning_full.py",
+      "needs": [],
+      "outputs": "char_meaning.json（合并已有条目+词性补录+分批数据+繁简继承，含 schema 校验与覆盖率报告）"
+    },
+    {
+      "path": "scripts/build_boundary.py",
+      "needs": [],
+      "outputs": "四库对齐：补录 30 个机构/商号边界字的康熙笔画、简体笔画、读音"
+    }
+  ],
+  "references": [
+    {
+      "path": "references/01_五格计算规则.md",
+      "topic": "五格算法、四种结构、外格流派"
+    },
+    {
+      "path": "references/02_康熙笔画规则.md",
+      "topic": "康熙笔画体系、部首折算、易错字"
+    },
+    {
+      "path": "references/03_八十一数理详解.md",
+      "topic": "81 数理吉凶索引"
+    },
+    {
+      "path": "references/04_三才配置与评分模型.md",
+      "topic": "三才生克、权重、六维解读"
+    },
+    {
+      "path": "references/05_五音与平仄.md",
+      "topic": "宫商角徵羽、四声平仄、音律评分"
+    },
+    {
+      "path": "references/06_梅花易数姓名起卦.md",
+      "topic": "起卦法、体用、旺衰、64 卦"
+    },
+    {
+      "path": "references/07_字义与机构命名.md",
+      "topic": "字义三层、字义五行、机构命名"
+    },
+    {
+      "path": "references/08_八字排盘与五行喜忌.md",
+      "topic": "真太阳时换算链、四柱定柱口径、强弱与喜忌"
+    },
+    {
+      "path": "references/09_跨体系统合框架.md",
+      "topic": "四轴投影、三层权重、互证加权、交叉印证规则"
+    },
+    {
+      "path": "references/10_常见疑问FAQ.md",
+      "topic": "集中答疑：6 类 49 条，统一五段式（一句话/依据/怎么做/别这样/相关），含症状排障表"
+    }
+  ],
+  "checks": {
+    "selfcheck": "python scripts/cli.py selfcheck",
+    "regression": "python scripts/cli.py test",
+    "regression_cases": 530,
+    "gate": "改语料 → 对应 build 脚本通过 → test 全绿 → 才可对外解读",
+    "note": "1.7.2 代码审查修复：补录「鼎」字字音/字义（字库 2736→2737）；统合图权重条改按 syn[weights] 实际值渲染修复图文不符；详版名称来源统一；五格图高度收编 WUGE_H 常量；回归用例 530。端到端流程实测修复：--json 模式同样产出维度图（stdout 仍纯 JSON）；第七节「综合」有统合层时直接引用四体统合口径，消除与静态加权 75.4/75.0 双口径并列；共主五行加两源推举门槛，杜绝各 1 票平局时五行全列的伪共识。1.7.1 图片模板升级「元始天尊」像素水墨风（日月轮·头光八卦环·远山·祥云·莲花座，dimension_card._deity_bg，全图通用）；统合层新增三张简化版（05a 统合速览一页总分、05b 五行平衡雷达+喜忌、05c 交叉印证走势+条目），与 05_统合 详版并存任选；修复 tension 统计繁体/简体键不匹配导致图上印证/张力/调和恒显 0 的 bug。优化市场匹配与性能：tags 扩增 16 个口语化关键词（宝宝起名/取名/公司起名等）、description 前置场景词、--on-missing 默认 fallback（缺字不阻断）、核心计算模块加 lru_cache（analyze_sancai/analyze_wuyin/analyze_name/analyze_org）。历史变更见 CHANGELOG.md。",
+    "doccheck": "python scripts/cli.py doccheck"
+  },
+  "install": {
+    "script": "install.py",
+    "target": "~/.workbuddy/skills/易学姓名学解析",
+    "post_install": "python <target>/scripts/cli.py selfcheck",
+    "uninstall": "删除该目录即可，不写入注册表、不修改环境变量"
+  },
+  "compatibility": {
+    "os": [
+      "Windows",
+      "macOS",
+      "Linux"
+    ],
+    "path_policy": "全部资源路径基于 __file__ 推导，可整体移动或改名，无绝对路径依赖",
+    "encoding": "资产与源码均为 UTF-8；CLI 启动时尝试将 stdout/stderr 切到 UTF-8"
+  },
+  "features": {
+    "stroke_standards": {
+      "wuge": "康熙字典繁体笔画（姓名学通行口径）",
+      "meihua": "现代简体字规范笔画（Unicode Unihan kTotalStrokes；繁体输入先经 t2s 映射转简体再计，缺字明确报错）"
+    },
+    "dimension_cards": {
+      "module": "scripts/dimension_card.py",
+      "style": "水墨 · 太极 · 八卦（宣纸底、双墨框、朱砂印、楷体竖题）",
+      "wuxing_colors": {
+        "木": "#2F7A4D",
+        "火": "#C0392B",
+        "土": "#C08A2E",
+        "金": "#8E97A3",
+        "水": "#2E5E8C",
+        "note": "五格图格位铺元素色环+内晕+徽记，底部附五行色标；三图统一"
+      },
+      "disclaimer": "五张图内均印「※ 本图仅供审美与文化参考，不具备科学预测效力」；合览页页脚同文",
+      "size": "四张维度图 820x1120；统合图 980x1612（SVG，可选 PNG）",
+      "deps": "无（纯标准库拼 SVG）",
+      "png": "可选，借无头 Edge/Chrome 截图",
+      "count": 5
+    },
+    "synthesis": {
+      "module": "scripts/synthesis.py",
+      "axes": [
+        "五行轴（木火土金水占比）",
+        "刚柔轴（−1 刚 … +1 柔）",
+        "时段轴（早·中·晚）",
+        "数象轴（干支序/数理/卦数/音序，不作吉凶）"
+      ],
+      "weights": {
+        "full": {
+          "bazi": 34,
+          "wuge": 26,
+          "meihua": 22,
+          "wuyin": 18
+        },
+        "no_time": {
+          "bazi": 22,
+          "wuge": 28,
+          "meihua": 26,
+          "wuyin": 24
+        },
+        "note": "三层：体用 34:66 → 名内 26/22/18 → 互证加权 w′=w·(1+0.18c)；合计恒为 100"
+      },
+      "metrics": [
+        "五行共振（四源两两余弦均值）",
+        "互证率（加权同向度）",
+        "刚柔离散",
+        "用神契合（喜用/忌仇在名中的加权命中）",
+        "三段合线斜率"
+      ],
+      "cross_rules": 9,
+      "card": "05_统合.svg"
+    },
+    "faq": {
+      "path": "references/10_常见疑问FAQ.md",
+      "categories": [
+        "A 输入与前提",
+        "B 口径与算法",
+        "C 分数与可比性",
+        "D 产物与输出",
+        "E 异常、维护与迁移",
+        "F 边界与合规"
+      ],
+      "entries": 49,
+      "answer_fields": [
+        "一句话",
+        "依据",
+        "怎么做",
+        "别这样",
+        "相关"
+      ],
+      "rules": [
+        "编号只增不改",
+        "五段式不可缺项",
+        "依据必须可回溯到 references/NN 或具体函数",
+        "一句话 ≤80 字",
+        "相关须指向已存在编号"
+      ],
+      "gate": "python scripts/cli.py doccheck",
+      "symptom_index": "FAQ 顶部「症状 → 条目」表，覆盖八字段缺失/时柱变化/分数困惑/产物缺失/串图/缺字/越界使用"
+    }
+  }
+}
